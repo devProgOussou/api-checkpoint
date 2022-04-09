@@ -1,30 +1,24 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import axios from 'axios';
 
-const UserList = ({ users }) => {
+const UserList = () => {
+    const [users, setUsers] = useState([]);
+    const fetchData = async () => {
+        const result = await axios
+            .get('https://jsonplaceholder.typicode.com/users')
+        setUsers(result.data);
+    };
+    useEffect(() => {
+        fetchData().then(r => console.log(r));
+    }, []);
 
-  let display = users.map(user => {
     return (
-      <tr>
-        <th scope="row">{user.id}</th>
-        <td>{user.name}</td>
-        <td>{user.username}</td>
-        <td>{user.email}</td>
-      </tr>
+        <div>
+            <ul>
+                {users.map(user => <li key={user.id}>{user.name}</li>)}
+            </ul>
+        </div>
     );
-  });
-  return (
-    <table className="table table-dark table-hover mt-4 ">
-      <thead>
-        <tr>
-          <th scope="col">id</th>
-          <th scope="col">Name</th>
-          <th scope="col">UserName</th>
-          <th scope="col">Email</th>
-        </tr>
-      </thead>
-      <tbody>{display}</tbody>
-    </table>
-  );
 }
 
 export default UserList;
